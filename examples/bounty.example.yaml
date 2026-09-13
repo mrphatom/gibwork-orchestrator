@@ -1,0 +1,16 @@
+title: "Improve error messages in the auth service"
+content: |
+  <p>We need clearer, actionable error messages when login or token refresh fails.</p>
+  <ul>
+    <li>Map common failure modes to user-friendly messages</li>
+    <li>Add structured error codes for the frontend</li>
+    <li>Write unit tests for the new mapping</li>
+  </ul>
+  <p>Deliverable: PR against the <code>main</code> branch.</p>
+reward: "75.00"
+tags:
+  - typescript
+  - backend
+  - dx
+minSubmissionAmount: "10.00"
+externalRef: "LINEAR-1234"
