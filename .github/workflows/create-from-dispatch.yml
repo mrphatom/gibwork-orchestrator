@@ -1,0 +1,45 @@
+name: Create Bounty (manual / external)
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: 'Bounty title'
+        required: true
+      content:
+        description: 'Bounty description (HTML or text)'
+        required: true
+      reward:
+        description: 'Reward amount'
+        required: true
+        default: '50.00'
+      tags:
+        description: 'Comma-separated tags'
+        required: false
+        default: 'internal'
+      ref:
+        description: 'External reference (Linear, GitHub, etc.)'
+        required: false
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
+      - name: Create bounty
+        env:
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          GIBWORK_ENVIRONMENT: ${{ vars.GIBWORK_ENVIRONMENT || 'stage' }}
+          DRY_RUN: ${{ vars.DRY_RUN || 'true' }}
+        run: |
+          node dist/cli.js create \
+            --title "${{ github.event.inputs.title }}" \
+            --content "${{ github.event.inputs.content }}" \
+            --reward "${{ github.event.inputs.reward }}" \
+            --tags "${{ github.event.inputs.tags }}" \
+            --ref "${{ github.event.inputs.ref }}"
